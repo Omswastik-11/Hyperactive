@@ -60,6 +60,12 @@ class SkforecastOptCV(BaseEstimator):
 
     show_progress : bool, default=False
         Whether to show a progress bar.
+
+    higher_is_better : bool, default=False
+        Whether higher metric values indicate better performance.
+        Set to False (default) for error metrics like MSE, MAE, MAPE where
+        lower values are better. Set to True for metrics like R2 where
+        higher values indicate better model performance.
     """
 
     _tags = {
@@ -84,6 +90,7 @@ class SkforecastOptCV(BaseEstimator):
         n_jobs="auto",
         verbose=False,
         show_progress=False,
+        higher_is_better=False,
     ):
         self.forecaster = forecaster
         self.optimizer = optimizer
@@ -99,6 +106,7 @@ class SkforecastOptCV(BaseEstimator):
         self.n_jobs = n_jobs
         self.verbose = verbose
         self.show_progress = show_progress
+        self.higher_is_better = higher_is_better
 
     @classmethod
     def get_test_params(cls, parameter_set="default"):
@@ -174,6 +182,7 @@ class SkforecastOptCV(BaseEstimator):
             n_jobs=self.n_jobs,
             verbose=self.verbose,
             show_progress=self.show_progress,
+            higher_is_better=self.higher_is_better,
         )
 
         if hasattr(self.optimizer, "clone"):

@@ -60,6 +60,12 @@ class SkforecastExperiment(BaseExperiment):
 
     show_progress : bool, default=False
         Whether to show a progress bar.
+
+    higher_is_better : bool, default=False
+        Whether higher metric values indicate better performance.
+        Set to False (default) for error metrics like MSE, MAE, MAPE where
+        lower values are better. Set to True for metrics like R2 where
+        higher values indicate better model performance.
     """
 
     _tags = {
@@ -84,6 +90,7 @@ class SkforecastExperiment(BaseExperiment):
         n_jobs="auto",
         verbose=False,
         show_progress=False,
+        higher_is_better=False,
     ):
         self.forecaster = forecaster
         self.y = y
@@ -99,12 +106,13 @@ class SkforecastExperiment(BaseExperiment):
         self.n_jobs = n_jobs
         self.verbose = verbose
         self.show_progress = show_progress
+        self.higher_is_better = higher_is_better
 
         super().__init__()
 
-        # All standard skforecast/sklearn regression metrics are "lower is better"
-        # (MSE, MAE, MAPE, RMSE, etc.). Custom callables are assumed lower is better.
-        self.set_tags(**{"property:higher_or_lower_is_better": "lower"})
+        # Set the optimization direction based on higher_is_better parameter
+        higher_or_lower = "higher" if higher_is_better else "lower"
+        self.set_tags(**{"property:higher_or_lower_is_better": higher_or_lower})
 
     @classmethod
     def get_test_params(cls, parameter_set="default"):
