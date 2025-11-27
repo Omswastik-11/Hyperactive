@@ -52,16 +52,16 @@ sklearn-integration = [
 sktime-integration = [
   "skpro",
   'sktime; python_version < "3.14"',
-  "skforecast",
+  'skforecast; python_version < "3.14"',
 ]
 skforecast-integration = [
-  "skforecast",
+  'skforecast; python_version < "3.14"',
 ]
 integrations = [
   "scikit-learn <1.8.0",
   "skpro",
   'sktime; python_version < "3.14"',
-  "skforecast",
+  'skforecast; python_version < "3.14"',
 ]
 build = [
   "setuptools",
@@ -85,6 +85,11 @@ all_extras = [
   "hyperactive[integrations]",
   "optuna<5",
   "lightning",
+]
+test_examples = [
+  "pytest == 9.0.1",
+  "hyperactive[integrations]",
+  "optuna<5",
 ]
 
 

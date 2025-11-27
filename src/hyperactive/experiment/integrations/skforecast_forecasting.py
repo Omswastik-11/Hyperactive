@@ -62,6 +62,12 @@ class SkforecastExperiment(BaseExperiment):
         Whether to show a progress bar.
     """
 
+    _tags = {
+        "authors": "Omswastik-11",
+        "maintainers": ["Omswastik-11", "fkiraly", "JoaquinAmatRodrigo", "SimonBlanke"],
+        "python_dependencies": "skforecast",
+    }
+
     def __init__(
         self,
         forecaster,
