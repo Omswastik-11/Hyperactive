@@ -123,7 +123,7 @@ class TSROptCV(_DelegatedRegressor):
     """
 
     _tags = {
-        "authors": ["Omswastik-11"],
+        "authors": ["Omswastik-11", "fkiraly"],
         "maintainers": ["fkiraly", "SimonBlanke", "Omswastik-11"],
         "python_dependencies": "sktime",
     }
@@ -201,56 +201,47 @@ class TSROptCV(_DelegatedRegressor):
 
     @classmethod
     def get_test_params(cls, parameter_set="default"):
-        """Return testing parameter settings for the skbase object.
-
-        ``get_test_params`` is a unified interface point to store
-        parameter settings for testing purposes. This function is also
-        used in ``create_test_instance`` and ``create_test_instances_and_names``
-        to construct test instances.
-
-        ``get_test_params`` should return a single ``dict``, or a ``list`` of ``dict``.
-
-        Each ``dict`` is a parameter configuration for testing,
-        and can be used to construct an "interesting" test instance.
-        A call to ``cls(**params)`` should
-        be valid for all dictionaries ``params`` in the return of ``get_test_params``.
-
-        The ``get_test_params`` need not return fixed lists of dictionaries,
-        it can also return dynamic or stochastic parameter settings.
+        """Return testing parameter settings for the estimator.
 
         Parameters
         ----------
         parameter_set : str, default="default"
             Name of the set of test parameters to return, for use in tests. If no
-            special parameters are defined for a value, will return `"default"` set.
+            special parameters are defined for a value, will return ``"default"`` set.
 
         Returns
         -------
-        params : dict or list of dict, default = {}
-            Parameters to create testing instances of the class
-            Each dict are parameters to construct an "interesting" test instance, i.e.,
-            `MyClass(**params)` or `MyClass(**params[i])` creates a valid test instance.
-            `create_test_instance` uses the first (or only) dictionary in `params`
+        params : dict or list of dict
         """
+        from sklearn.metrics import mean_squared_error
+        from sklearn.model_selection import KFold
+        from sktime.regression.distance_based import KNeighborsTimeSeriesRegressor
         from sktime.regression.dummy import DummyRegressor
 
-        from hyperactive.opt import RandomSearch
+        from hyperactive.opt.gfo import HillClimbing
+        from hyperactive.opt.gridsearch import GridSearchSk
+        from hyperactive.opt.random_search import RandomSearchSk
 
-        params0 = {
+        params_gridsearch = {
             "estimator": DummyRegressor(),
-            "optimizer": RandomSearch(
-                search_space={"strategy": ["mean", "median"]},
-                n_iter=2,
-            ),
+            "optimizer": GridSearchSk(param_grid={"strategy": ["mean", "median"]}),
         }
-
-        params1 = {
-            "estimator": DummyRegressor(strategy="mean"),
-            "optimizer": RandomSearch(
-                search_space={"strategy": ["mean", "median"]},
-                n_iter=2,
-            ),
+        params_randomsearch = {
+            "estimator": DummyRegressor(),
             "cv": 2,
+            "optimizer": RandomSearchSk(
+                param_distributions={"strategy": ["mean", "median"]},
+            ),
+            "scoring": mean_squared_error,
         }
-
-        return [params0, params1]
+        params_hillclimb = {
+            "estimator": KNeighborsTimeSeriesRegressor(),
+            "cv": KFold(n_splits=2, shuffle=False),
+            "optimizer": HillClimbing(
+                search_space={"n_neighbors": [1, 2, 4]},
+                n_iter=10,
+                n_neighbours=5,
+            ),
+            "scoring": "mean_squared_error",
+        }
+        return [params_gridsearch, params_randomsearch, params_hillclimb]

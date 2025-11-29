@@ -102,6 +102,12 @@ class SktimeRegressionExperiment(BaseExperiment):
         - "ray": any valid keys for ``ray.init``, e.g., ``num_cpus``.
     """
 
+    _tags = {
+        "authors": ["fkiraly", "Omswastik-11"],
+        "maintainers": ["SimonBlanke", "fkiraly", "Omswastik-11"],
+        "python_dependencies": "sktime",
+    }
+
     def __init__(
         self,
         estimator,
@@ -125,7 +131,22 @@ class SktimeRegressionExperiment(BaseExperiment):
         super().__init__()
 
         self._cv = cv
-        self._scoring = scoring
+        if scoring is None:
+            from sktime.performance_metrics.forecasting import (
+                MeanAbsolutePercentageError,
+            )
+
+            self._scoring = MeanAbsolutePercentageError(symmetric=True)
+        else:
+            self._scoring = scoring
+
+        if scoring is None or (
+            hasattr(scoring, "get_tag") and scoring.get_tag("lower_is_better", False)
+        ):
+            higher_or_lower_better = "lower"
+        else:
+            higher_or_lower_better = "higher"
+        self.set_tags(**{"property:higher_or_lower_is_better": higher_or_lower_better})
 
     def _get_model_parameters(self):
         """Return the parameters of the model.
