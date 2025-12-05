@@ -56,6 +56,18 @@ optimizer = RepulsingHillClimbing(
 # [end:repulsing_hill_climbing]
 
 
+# [start:stochastic_hill_climbing]
+from hyperactive.opt.gfo import StochasticHillClimbing
+
+optimizer = StochasticHillClimbing(
+    search_space=search_space,
+    n_iter=100,
+    experiment=objective,
+    p_accept=0.3,  # Probability of accepting worse solutions
+)
+# [end:stochastic_hill_climbing]
+
+
 # [start:downhill_simplex]
 from hyperactive.opt.gfo import DownhillSimplexOptimizer
 

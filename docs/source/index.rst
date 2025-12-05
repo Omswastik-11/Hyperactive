@@ -291,8 +291,8 @@ Integrations
 
 ----
 
-Installation
-============
+Quick Install
+=============
 
 .. code-block:: bash
 
@@ -333,6 +333,8 @@ Contents
    user_guide
    api_reference
    examples
+   faq
+   troubleshooting
    get_involved
    about
 

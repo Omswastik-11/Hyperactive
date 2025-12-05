@@ -8,13 +8,21 @@ This guide covers Hyperactive's core concepts and features in depth.
 Whether you're new to hyperparameter optimization or an experienced practitioner,
 you'll find detailed explanations and practical examples here.
 
+.. note::
+
+   Some code snippets in this guide are **illustrative** and may contain
+   placeholders (like ``score`` or ``SomeOptimizer``). For complete, runnable
+   examples, see the :ref:`examples` or :ref:`get_started` sections.
+
 .. toctree::
    :maxdepth: 1
 
    user_guide/introduction
+   user_guide/search_spaces
    user_guide/optimizers
    user_guide/experiments
    user_guide/integrations
+   user_guide/migration
 
 
 Overview
@@ -70,6 +78,10 @@ Guide Contents
     Core concepts: optimizers, experiments, and search spaces.
     Start here to understand Hyperactive's architecture.
 
+:ref:`user_guide_search_spaces`
+    Best practices for designing search spaces.
+    Covers scaling, granularity, and common patterns.
+
 :ref:`user_guide_optimizers`
     Detailed guide to choosing and configuring optimizers.
     Covers local search, global search, population methods, and Bayesian approaches.
@@ -81,3 +93,7 @@ Guide Contents
 :ref:`user_guide_integrations`
     Framework integrations for scikit-learn, sktime, skpro, and PyTorch.
     Drop-in replacements for GridSearchCV and similar tools.
+
+:ref:`user_guide_migration`
+    Migration guide for upgrading from Hyperactive v4 to v5.
+    Covers API changes, new patterns, and troubleshooting.

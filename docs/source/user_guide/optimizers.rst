@@ -77,6 +77,17 @@ Remembers visited regions and avoids them, encouraging broader exploration.
    :start-after: # [start:repulsing_hill_climbing]
    :end-before: # [end:repulsing_hill_climbing]
 
+**Stochastic Hill Climbing**
+
+Hill climbing with a probability of accepting worse solutions. The ``p_accept``
+parameter controls exploration — higher values make it more likely to accept
+non-improving moves, helping escape local optima.
+
+.. literalinclude:: ../_snippets/user_guide/optimizers.py
+   :language: python
+   :start-after: # [start:stochastic_hill_climbing]
+   :end-before: # [end:stochastic_hill_climbing]
+
 **Downhill Simplex (Nelder-Mead)**
 
 Uses a simplex of points to navigate the search space. Good for continuous problems.

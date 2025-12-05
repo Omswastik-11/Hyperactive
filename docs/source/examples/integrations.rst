@@ -33,8 +33,8 @@ For time series forecasting and classification with sktime:
        pip install hyperactive[sktime-integration]
 
 
-Installation
-------------
+Installing Extras
+-----------------
 
 Install integration extras as needed:
 

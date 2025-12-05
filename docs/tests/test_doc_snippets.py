@@ -228,3 +228,51 @@ def test_github_example_links_exist():
         msg = f"Found {len(broken_links)} broken GitHub file link(s):\n"
         msg += "\n".join(f"  - {link}" for link in broken_links)
         pytest.fail(msg)
+
+
+def extract_include_paths(content: str) -> list[str]:
+    """Extract include and literalinclude paths from RST content.
+
+    Parameters
+    ----------
+    content : str
+        RST file content.
+
+    Returns
+    -------
+    list[str]
+        List of relative paths referenced by include directives.
+    """
+    # Match both include and literalinclude directives
+    # Format: .. include:: path or .. literalinclude:: path
+    pattern = r"\.\.\s+(?:include|literalinclude)::\s+([^\s\n]+)"
+    return re.findall(pattern, content)
+
+
+def test_rst_includes_exist():
+    """Test that all include/literalinclude paths in RST files exist.
+
+    This catches broken include directives that reference non-existent files.
+    """
+    broken_includes = []
+
+    for rst_file in get_rst_files():
+        # Skip auto-generated files and templates (they use Jinja placeholders)
+        if "auto_generated" in str(rst_file) or "_templates" in str(rst_file):
+            continue
+
+        content = rst_file.read_text()
+        includes = extract_include_paths(content)
+
+        for include_path in includes:
+            # Resolve path relative to the RST file's directory
+            full_path = rst_file.parent / include_path
+            if not full_path.exists():
+                broken_includes.append(
+                    f"{rst_file.relative_to(SOURCE_DIR)}: {include_path}"
+                )
+
+    if broken_includes:
+        msg = f"Found {len(broken_includes)} broken include path(s):\n"
+        msg += "\n".join(f"  - {inc}" for inc in broken_includes)
+        pytest.fail(msg)
