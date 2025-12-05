@@ -9,6 +9,7 @@ not required to be executable - they serve documentation purposes.
 """
 
 import importlib.util
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -17,6 +18,10 @@ import pytest
 
 # Path to the snippets directory
 SNIPPETS_DIR = Path(__file__).parent.parent / "source" / "_snippets"
+# Path to the docs source directory
+SOURCE_DIR = Path(__file__).parent.parent / "source"
+# Path to the repository root
+REPO_ROOT = Path(__file__).parent.parent.parent
 
 
 def get_testable_snippet_files():
@@ -160,3 +165,66 @@ def test_snippet_markers_are_balanced():
                 pytest.fail(
                     f"Snippet {snippet_file.name} has unmatched end marker: {marker}"
                 )
+
+
+def get_rst_files():
+    """Collect all RST files in the source directory.
+
+    Returns
+    -------
+    list[Path]
+        List of paths to all RST files.
+    """
+    return sorted(SOURCE_DIR.rglob("*.rst"))
+
+
+def extract_github_file_links(content: str) -> list[tuple[str, str]]:
+    """Extract GitHub file links from RST content.
+
+    Finds links of the form:
+    https://github.com/SimonBlanke/Hyperactive/blob/master/path/to/file.py
+
+    Parameters
+    ----------
+    content : str
+        RST file content.
+
+    Returns
+    -------
+    list[tuple[str, str]]
+        List of (full_url, relative_path) tuples.
+    """
+    # Pattern matches GitHub blob URLs to this repo
+    pattern = (
+        r"https://github\.com/SimonBlanke/Hyperactive/blob/master/([^\s>`\"\']+)"
+    )
+    matches = re.findall(pattern, content)
+    return [
+        (f"https://github.com/SimonBlanke/Hyperactive/blob/master/{path}", path)
+        for path in matches
+    ]
+
+
+def test_github_example_links_exist():
+    """Test that all GitHub example links in RST files point to existing files.
+
+    This verifies that documentation links to example files are not broken.
+    Only checks links to files within this repository.
+    """
+    broken_links = []
+
+    for rst_file in get_rst_files():
+        content = rst_file.read_text()
+        links = extract_github_file_links(content)
+
+        for full_url, rel_path in links:
+            local_path = REPO_ROOT / rel_path
+            if not local_path.exists():
+                broken_links.append(
+                    f"{rst_file.name}: {rel_path} (file not found)"
+                )
+
+    if broken_links:
+        msg = f"Found {len(broken_links)} broken GitHub file link(s):\n"
+        msg += "\n".join(f"  - {link}" for link in broken_links)
+        pytest.fail(msg)
