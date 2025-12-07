@@ -96,6 +96,20 @@ If you're upgrading from an older version:
     pip install hyperactive==4.x.x
 
 
+Legacy Documentation
+^^^^^^^^^^^^^^^^^^^^
+
+Documentation for Hyperactive v4 is still available at the legacy documentation site:
+
+`Legacy Documentation (v4) <https://simonblanke.github.io/hyperactive-documentation/5.0/>`_
+
+This may be useful if you:
+
+- Are maintaining projects that use Hyperactive v4
+- Need to reference the previous API design
+- Want to compare the old and new approaches
+
+
 Future Roadmap
 --------------
 

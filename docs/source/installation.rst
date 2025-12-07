@@ -190,3 +190,16 @@ Ensure all objects in your search space are serializable (no lambdas, closures,
 or bound methods). Use top-level functions and basic Python types.
 
 For more help, see the `GitHub Issues <https://github.com/SimonBlanke/Hyperactive/issues>`_.
+
+
+Using Older Versions
+--------------------
+
+If you need to use Hyperactive v4, you can install a specific version:
+
+.. code-block:: bash
+
+    pip install hyperactive==4.8.0
+
+Documentation for v4 is available at:
+`Legacy Documentation (v4) <https://simonblanke.github.io/hyperactive-documentation/5.0/>`_

@@ -7,6 +7,11 @@ Migration Guide (v4→v5)
 This guide helps you migrate from Hyperactive v4 to v5. Version 5 introduces
 a new experiment-based architecture with a simplified API.
 
+.. note::
+
+   If you're still using Hyperactive v4 and need documentation for that version,
+   see the `Legacy Documentation (v4) <https://simonblanke.github.io/hyperactive-documentation/5.0/>`_.
+
 Quick Summary
 -------------
 

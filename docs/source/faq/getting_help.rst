@@ -17,3 +17,12 @@ Where can I get help?
 - Read the :ref:`user_guide` for detailed explanations
 - Join the `Discord <https://discord.gg/7uKdHfdcJG>`_ community
 - Search or ask on `GitHub Discussions <https://github.com/SimonBlanke/Hyperactive/discussions>`_
+
+
+Where is the documentation for older versions?
+----------------------------------------------
+
+Documentation for Hyperactive v4 is available at:
+`Legacy Documentation (v4) <https://simonblanke.github.io/hyperactive-documentation/5.0/>`_
+
+If you're migrating from v4 to v5, see the :ref:`user_guide_migration`.
