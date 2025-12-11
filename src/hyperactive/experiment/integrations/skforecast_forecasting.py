@@ -177,6 +177,16 @@ class SkforecastExperiment(BaseExperiment):
         """
         return [{"n_estimators": 5}]
 
+    def _paramnames(self):
+        """Return the parameter names of the search.
+
+        Returns
+        -------
+        list of str
+            The parameter names of the search parameters.
+        """
+        return list(self.forecaster.get_params().keys())
+
     def _evaluate(self, params):
         """Evaluate the parameters.
 
